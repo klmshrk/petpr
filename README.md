@@ -1,6 +1,6 @@
 # App Description
 
-This app is a simple web site that displays the text "Hello, World!". The app is written in JavaScript and compiled into a single file.
+This app is a simple web site that displays the text "Hello, World!". The app is written in Node.JS and compiled into a single file.
 
 ## GitHub Actions Workflow
 
