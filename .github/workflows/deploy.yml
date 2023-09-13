@@ -1,4 +1,4 @@
-name: CI/CD with Terraform1
+name: CI/CD with Terraform
 on:
     push:
         branches:
@@ -7,7 +7,7 @@ on:
 env:
     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    TF_STATE_BUCKET_NAME: ${{ secrets.AWS_TF_STATE_BUCKET_NAME}}
+    TF_STATE_BUCKET_NAME: ${{ secrets.AWS_TF_STATE_BUCKET_NAME }}
     PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PRIVATE }}
     PUBLIC_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PUBLIC }}
     AWS_REGION: us-east-1            
@@ -15,8 +15,6 @@ env:
 jobs:
     deploy-infra:
         runs-on: ubuntu-latest
-        outputs:
-            SERVER_PUBLIC_IP: ${{ steps.set-dns.outputs.instance_public_dns}}
         steps:
             - name: checkout repo
               uses: actions/checkout@v2
@@ -72,10 +70,10 @@ jobs:
             - name: Deploy Docker Image to EC2
               uses: appleboy/ssh-action@master
               with:
-                registry: ${{ steps.login-ecr.outputs.registry }}
-                repository: example-node-app
-                image_tag: ${{ github.sha }}
-                aws_default_region: us-east-1
+                REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                REPOSITORY: example-node-app
+                IMAGE_TAG: ${{ github.sha }}
+                AWS_DEFAULT_REGION: us-east-1
                 host: ${{ env.SERVER_PUBLIC_IP }}
                 username: ubuntu
                 key: ${{ env.PRIVATE_SSH_KEY }}
